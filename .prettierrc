@@ -1,0 +1,7 @@
+{
+  "singleQuote": true,
+  "trailingComma": "all",
+  "no-unused-vars": "warn",
+  "no-console": "warn",
+  "semi": true
+}
