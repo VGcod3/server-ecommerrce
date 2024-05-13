@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import { PrismaService } from 'src/prisma.service';
-import { ReturnUser } from './return-user.object';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { ReturnUserObject } from './return-user.object';
 
 import { hash } from 'argon2';
 import { ValidatorService } from 'src/validator/validator.service';
@@ -20,7 +20,7 @@ export class UserService {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       select: {
-        ...ReturnUser,
+        ...ReturnUserObject,
         ...selectObject,
         favorites: {
           select: {

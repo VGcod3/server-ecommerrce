@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { ValidatorService } from 'src/validator/validator.service';
 import { returnReviewObject } from './return-review';
 import { ReviewDto } from './review.dto';
@@ -41,7 +41,7 @@ export class ReviewService {
 
     const review = await this.byId(id);
 
-    await this.validator.ensureReviewOwnership(review.id, userId);
+    await this.validator.ensureReviewOwnership(review.user.id, userId);
 
     return await this.prisma.review.update({
       where: { id },

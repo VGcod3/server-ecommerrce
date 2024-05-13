@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PaginationService } from 'src/pagination/pagination.service';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { generateSlug } from 'src/utils/generate-slug';
 import { ValidatorService } from 'src/validator/validator.service';
 import { GetAllProductDto, OrderBy, ProductDto } from './product.dto';

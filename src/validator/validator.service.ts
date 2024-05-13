@@ -8,10 +8,10 @@ import { Prisma } from '@prisma/client';
 import { verify } from 'argon2';
 import { AuthDto } from 'src/auth/auth.dto';
 import { returnCategoryObject } from 'src/category/return-category';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { returnProductObject } from 'src/product/return-product';
 import { returnReviewObject } from 'src/review/return-review';
-import { ReturnUser } from 'src/user/return-user.object';
+import { ReturnUserObject } from 'src/user/return-user.object';
 
 @Injectable()
 export class ValidatorService {
@@ -45,7 +45,7 @@ export class ValidatorService {
   async validateUserExistence(userId: number) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
-      select: ReturnUser,
+      select: ReturnUserObject,
     });
 
     if (!user) {
@@ -55,7 +55,7 @@ export class ValidatorService {
     return user;
   }
 
-  async validateUser(dto: AuthDto) {
+  async validateCredentials(dto: AuthDto) {
     const user = await this.prisma.user.findUnique({
       where: {
         email: dto.email,

@@ -7,7 +7,7 @@ import {
   Patch,
   Put,
 } from '@nestjs/common';
-import { Auth } from 'src/auth/auth.guard';
+import { Auth } from 'src/auth/auth.decorator';
 import { CurrentUser } from 'src/auth/user.decorator';
 import { UserDto } from './user.dto';
 import { UserService } from './user.service';
@@ -18,8 +18,8 @@ export class UserController {
 
   @Get('profile')
   @Auth()
-  async getProfile(@CurrentUser('id') profileId: number) {
-    return this.userService.byId(profileId);
+  async getProfile(@CurrentUser('id') userId: number) {
+    return this.userService.byId(userId);
   }
 
   @Auth()

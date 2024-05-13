@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client';
-export const ReturnUser: Prisma.UserSelect = {
+
+export const ReturnUserObject: Prisma.UserSelect = {
   id: true,
   email: true,
   name: true,

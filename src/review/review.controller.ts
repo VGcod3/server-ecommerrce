@@ -9,7 +9,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Auth } from 'src/auth/auth.guard';
+import { Auth } from 'src/auth/auth.decorator';
 import { CurrentUser } from 'src/auth/user.decorator';
 import { ReviewDto } from './review.dto';
 import { ReviewService } from './review.service';

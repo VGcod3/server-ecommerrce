@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { ValidatorService } from './validator.service';
 
 @Module({
-  providers: [ValidatorService, PrismaService],
+  providers: [ValidatorService, PrismaService, JwtService],
   exports: [ValidatorService],
 })
 export class ValidatorModule {}

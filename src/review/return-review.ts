@@ -1,9 +1,9 @@
 import { Prisma } from '@prisma/client';
-import { ReturnUser } from 'src/user/return-user.object';
+import { ReturnUserObject } from 'src/user/return-user.object';
 
 export const returnReviewObject: Prisma.ReviewSelect = {
   user: {
-    select: ReturnUser,
+    select: ReturnUserObject,
   },
   createdAt: true,
   text: true,

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 import { generateSlug } from 'src/utils/generate-slug';
 import { ValidatorService } from 'src/validator/validator.service';
 import { CategoryDto } from './category.dto';

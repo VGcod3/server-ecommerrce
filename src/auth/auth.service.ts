@@ -3,8 +3,9 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import { hash } from 'argon2';
+import { capitalize } from 'src/utils/capitalize';
 import { ValidatorService } from 'src/validator/validator.service';
-import { PrismaService } from '../prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './auth.dto';
 
 @Injectable()
@@ -28,7 +29,7 @@ export class AuthService {
       },
     });
 
-    const tokens = await this.issueTokens(user.id);
+    const tokens = this.generateTokens(user.id);
 
     return {
       user: this.returnUserFields(user),
@@ -37,9 +38,9 @@ export class AuthService {
   }
 
   async login(dto: AuthDto) {
-    const user = await this.validator.validateUser(dto);
+    const user = await this.validator.validateCredentials(dto);
 
-    const tokens = await this.issueTokens(user.id);
+    const tokens = this.generateTokens(user.id);
 
     return {
       user: this.returnUserFields(user),
@@ -48,11 +49,7 @@ export class AuthService {
   }
 
   async getNewTokens(refreshToken: string) {
-    const result = await this.jwt.verifyAsync(refreshToken);
-
-    if (!result) {
-      throw new UnauthorizedException('Invalid token');
-    }
+    const result = await this.validateJwt(refreshToken);
 
     const user = await this.prisma.user.findUnique({
       where: {
@@ -60,26 +57,45 @@ export class AuthService {
       },
     });
 
-    const tokens = await this.issueTokens(user.id);
+    const tokens = this.generateTokens(user.id);
 
     return {
       user: this.returnUserFields(user),
-      ...tokens,
+      accessToken: tokens.accessToken,
     };
   }
 
-  private async issueTokens(userId: number) {
-    const data = {
-      id: userId,
-    };
+  async validateJwt(token: string) {
+    try {
+      const result = this.jwt.verify(token);
 
-    const accessToken = this.jwt.sign(data, {
-      expiresIn: '1h',
-    });
+      if (!result) {
+        throw new UnauthorizedException(
+          'Token verification failed: Invalid token!',
+        );
+      }
 
-    const refreshToken = this.jwt.sign(data, {
-      expiresIn: '7d',
-    });
+      return result;
+    } catch (error) {
+      // mostly token expired
+      throw new UnauthorizedException(capitalize(error.message) + '!');
+    }
+  }
+
+  private generateTokens(id: number) {
+    const accessToken = this.jwt.sign(
+      { id },
+      {
+        expiresIn: '20s',
+      },
+    );
+
+    const refreshToken = this.jwt.sign(
+      { id },
+      {
+        expiresIn: '30s',
+      },
+    );
 
     return { accessToken, refreshToken };
   }
